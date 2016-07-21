@@ -1,0 +1,8 @@
+org\junglejobs\newsservice\controller\RestController.class
+org\junglejobs\newsservice\util\CustomNewsSerializer.class
+org\junglejobs\newsservice\beans\ErrorMessage.class
+org\junglejobs\newsservice\dao\NewsDaoImpl.class
+org\junglejobs\newsservice\beans\NewsArticle.class
+org\junglejobs\newsservice\service\NewsService.class
+org\junglejobs\newsservice\dao\NewsDao.class
+org\junglejobs\newsservice\util\WrongDatesRangeException.class
