@@ -1,5 +1,7 @@
 package org.junglejobs.newsservice.beans;
 
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 public class ErrorMessage {
 
 	private int status;

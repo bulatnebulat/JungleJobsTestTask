@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -32,32 +34,33 @@ public class RestController {
 	NewsService newsService;
 
 	static final Logger logger = Logger.getLogger(RestController.class);
-	
+
+	// @ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Wrong dates range")
 	@ExceptionHandler(WrongDatesRangeException.class)
-	public ErrorMessage myError(HttpServletRequest request, Exception exception) {
-	    ErrorMessage error = new ErrorMessage();
-	    error.setStatus(HttpStatus.BAD_REQUEST.value());
-	    error.setMessage(exception.getLocalizedMessage());
-	    error.setUrl(request.getRequestURL().toString());
-	    return error;
+	public @ResponseBody ErrorMessage myError(HttpServletRequest request, Exception exception) {
+		ErrorMessage error = new ErrorMessage();
+		error.setStatus(HttpStatus.BAD_REQUEST.value());
+		error.setMessage(exception.getLocalizedMessage());
+		error.setUrl(request.getRequestURL().toString());
+		return error;
 	}
-	
+
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public @ResponseBody List<NewsArticle> getNewsArticle(@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern="ddMMyyyy") Date fromDate,
-			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern="ddMMyyyy") Date toDate) {
-		if (!fromDate.after(toDate)) {
-			throw new WrongDatesRangeException(fromDate, toDate);
-		}
+	public @ResponseBody List<NewsArticle> getNewsArticle(
+			@RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = "ddMMyyyy") Date fromDate,
+			@RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = "ddMMyyyy") Date toDate)
+					throws WrongDatesRangeException {
 		List<NewsArticle> articleList = null;
-		try {
-			articleList = newsService.getEntityList(fromDate, toDate);
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (fromDate.after(toDate)) {
+			throw new WrongDatesRangeException(fromDate, toDate);
+		} else {
+			try {
+				articleList = newsService.getEntityList(fromDate, toDate);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-
 		return articleList;
 	}
 
-	
 }

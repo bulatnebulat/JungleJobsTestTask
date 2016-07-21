@@ -23,7 +23,7 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="annotatedClasses">
 			<list>
-				<value>org.junglejobs.newsservice.domain.NewsArticle</value>
+				<value>org.junglejobs.newsservice.beans.NewsArticle</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
